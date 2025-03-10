@@ -1,11 +1,7 @@
 import 'package:ecomanga/features/auth/screens/register_screen.dart';
-import 'package:ecomanga/features/home/home_screen.dart';
-import 'package:ecomanga/features/home/root_screen.dart';
-import 'package:ecomanga/features/onbording_screens/on_bording_screen.dart';
+
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -52,8 +48,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset(
           "assets/icons/app_icon.png",
-          height: 250.h,
-          width: 250.w,
+          height: 250,
+          width: 250,
         ),
       ),
     );

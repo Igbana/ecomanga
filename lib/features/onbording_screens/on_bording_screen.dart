@@ -1,12 +1,8 @@
-import 'dart:math';
-
 import 'package:ecomanga/common/app_colors.dart';
 import 'package:ecomanga/features/auth/screens/register_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:lottie/lottie.dart';
 
 class OnbordingScreen extends StatefulWidget {
   const OnbordingScreen({super.key});
@@ -19,16 +15,12 @@ class _OnbordingScreenState extends State<OnbordingScreen>
     with TickerProviderStateMixin {
   final PageController _pageController = PageController();
   late AnimationController _controller;
-  late Animation<Color?> _animation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1000));
-
-    _animation = ColorTween(begin: circleColors.first, end: circleColors.first)
-        .animate(_controller);
 
     _controller.addListener(() => setState(() {}));
 

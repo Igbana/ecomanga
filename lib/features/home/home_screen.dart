@@ -7,7 +7,6 @@ import 'package:ecomanga/features/home/SocialPostScreen.dart';
 import 'package:ecomanga/features/home/create_post_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -303,53 +302,53 @@ class _HomeScreenState extends State<HomeScreen> {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: ScaleButton(
-            onTap: () {
-              Utils.go(
-                context: context,
-                screen: SocialPostScreen(
-                  tag: "post_image_$index.tostrig",
-                  image:
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q",
-                  profileImg:
-                      "https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400",
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade300,
+                  blurRadius: 6,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 3),
                 ),
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade300,
-                    blurRadius: 6,
-                    spreadRadius: 2,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
-                      ),
-                    ),
-                    title: Text('Jayce Rodrygo'),
-                    subtitle: Text('3 days ago'),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 200,
+                  title: Text('Jayce Rodrygo'),
+                  subtitle: Text('3 days ago'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 200,
+                  child: ScaleButton(
+                    onTap: () {
+                      Utils.go(
+                        context: context,
+                        screen: SocialPostScreen(
+                          tag: "post_image_$index.tostrig",
+                          image:
+                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q",
+                          profileImg:
+                              "https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400",
+                        ),
+                      );
+                    },
                     child: Hero(
                       tag: 'post_image_$index',
                       child: ClipRRect(
@@ -365,8 +364,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.favorite_border_outlined)),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.comment_outlined)),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    ScaleButton(
+                      onTap: () {},
+                      child: Image.asset(
+                        "assets/icons/send.png",
+                        height: 40,
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
           ),
         );
@@ -485,7 +513,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(7),
+        padding: const EdgeInsets.all(7),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: Colors.blue.shade100.withOpacity(0.4)),
