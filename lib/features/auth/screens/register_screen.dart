@@ -22,6 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _name = TextEditingController();
+  final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
   bool _agreed = false;
@@ -76,9 +77,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     iconData: Icons.person_2_outlined,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please enter your password";
+                        return "Please enter your full name";
                       } else if (value.length < 3) {
                         return "Name length should be 3 character";
+                      }
+                      return null;
+                    }),
+                    CustomTextField(
+                    hintText: "Username",
+                    controller: _username,
+                    autofocus: true,
+                    removeFocusOutside: true,
+                    iconData: Icons.person_2_outlined,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your username";
+                      } else if (value.length < 3) {
+                        return "Name length should be, at leaast, 3 characters";
                       }
                       return null;
                     }),
@@ -184,6 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _password.text,
                         _name.text.split(" ")[0],
                         _name.text.split(" ")[1],
+                        _username.text,
                         _email.text,
                         _phone.text,
                       );

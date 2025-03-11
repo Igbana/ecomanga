@@ -14,6 +14,7 @@ class AuthController extends GetxController {
     String password,
     String firstName,
     String lastName,
+    String username,
     String email,
     String phoneNo,
   ) async {
@@ -25,7 +26,7 @@ class AuthController extends GetxController {
           'password': password,
           'firstName': firstName,
           'lastName': lastName,
-          "username": "",
+          "username": username,
           'email': email,
           'phoneNo': phoneNo,
           'role': 'user',
@@ -34,7 +35,6 @@ class AuthController extends GetxController {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      print("$password, $firstName, $lastName, $email, $phoneNo");
       data = await json.decode(response.body);
       if (response.statusCode.toString()[0] == "2") {
         print(data);
