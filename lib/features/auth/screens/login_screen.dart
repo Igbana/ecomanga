@@ -4,6 +4,7 @@ import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/common/widgets/custom_text_field.dart';
 import 'package:ecomanga/controllers/auth/auth.dart';
 import 'package:ecomanga/controllers/controllers.dart';
+import 'package:ecomanga/controllers/shared_pref/shared_pref.dart';
 import 'package:ecomanga/features/auth/screens/register_screen.dart';
 import 'package:ecomanga/features/auth/screens/verify_mail_screen.dart';
 import 'package:ecomanga/features/home/home_screen.dart';
@@ -139,8 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 3.h,
                 ),
                 Obx(() {
-                  LoginController controller = Get.find();
-                  if (controller.errorMessage.value != "") {
+                  LoginController loginController = Get.find();
+                  PrefController prefController = Get.find();
+                  if (loginController.errorMessage.value != "") {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       showDialog(
                         context: context,
@@ -155,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           content: Text(
-                            controller.errorMessage.value.trim(),
+                            loginController.errorMessage.value.trim(),
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.white,
@@ -163,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ).then((_) {
-                        controller.errorMessage.value = "";
+                        loginController.errorMessage.value = "";
                       });
                     });
                   }
@@ -180,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         SizedBox(width: 12),
-                        if (controller.isLoading.value)
+                        if (loginController.isLoading.value)
                           SizedBox(
                             height: 17,
                             width: 17,
@@ -188,16 +190,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           )
                       ],
                     ),
-                    onPressed: () {
-                      controller.login(
+                    onPressed: () async {
+                      final resp = await loginController.login(
                         password: _password.text,
                         email: _email.text,
                       );
-                      if (controller.authSuccessful.value) {
+                      if (loginController.authSuccessful.value) {
+                        prefController.login(resp[0], resp[1]);
+                        print(prefController.gTk());
                         Utils.go(context: context, screen: const RootScreen());
                       }
                     },
-                    isLoading: controller.isLoading.value,
+                    isLoading: loginController.isLoading.value,
                   );
                 }),
                 SizedBox(
