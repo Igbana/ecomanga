@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class AuthController extends GetxController {
+class RegisterController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool authSuccessful = false.obs;
   RxString errorMessage = "".obs;
@@ -57,4 +57,6 @@ class AuthController extends GetxController {
     }
     isLoading.value = false;
   }
+
+  
 }

@@ -2,12 +2,16 @@ import 'package:ecomanga/common/app_colors.dart';
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/common/widgets/custom_text_field.dart';
+import 'package:ecomanga/controllers/auth/auth.dart';
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:ecomanga/features/auth/screens/register_screen.dart';
 import 'package:ecomanga/features/auth/screens/verify_mail_screen.dart';
-import 'package:ecomanga/features/onbording_screens/on_bording_screen.dart';
+import 'package:ecomanga/features/home/home_screen.dart';
+import 'package:ecomanga/features/home/root_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -134,15 +138,68 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 3.h,
                 ),
-                DynamicButton.fromText(
-                  text: "Log in",
-                  onPressed: () {
-                    Utils.go(
-                      context: context,
-                      screen: const VerifyEmailScreen(),
-                    );
-                  },
-                ),
+                Obx(() {
+                  LoginController controller = Get.find();
+                  if (controller.errorMessage.value != "") {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: Colors.red[900],
+                          title: Text(
+                            "Error",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                          content: Text(
+                            controller.errorMessage.value.trim(),
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ).then((_) {
+                        controller.errorMessage.value = "";
+                      });
+                    });
+                  }
+                  return DynamicButton(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Sign up",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        if (controller.isLoading.value)
+                          SizedBox(
+                            height: 17,
+                            width: 17,
+                            child: CircularProgressIndicator(strokeWidth: 3),
+                          )
+                      ],
+                    ),
+                    onPressed: () {
+                      controller.login(
+                        password: _password.text,
+                        email: _email.text,
+                      );
+                      if (controller.authSuccessful.value) {
+                        Utils.go(context: context, screen: const RootScreen());
+                      }
+                    },
+                    isLoading: controller.isLoading.value,
+                  );
+                }),
                 SizedBox(
                   height: 10.h,
                 ),
