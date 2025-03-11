@@ -197,37 +197,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (controller.authSuccessful.value) {
                     Utils.go(context: context, screen: VerifyEmailScreen());
                   }
-                  if (controller.isLoading.value) {
-                    showDialog(
+                  if (controller.errorMessage.value != "") {
+                    // Get.showSnackbar(GetSnackBar(
+                    //   title: "Error",
+                    //   message: controller.errorMessage.value,
+                    //   duration: Duration(seconds: 2),
+                    // ));
+
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showDialog(
                         context: context,
-                        builder: (context) {
-                          return Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              padding: EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircularProgressIndicator(
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(height: 12),
-                                  Text(
-                                    "Signing in ...",
-                                    style: TextStyle(fontSize: 12),
-                                  )
-                                ],
-                              ),
+                        builder: (context) => AlertDialog(
+                          backgroundColor: Colors.red[900],
+                          title: Text(
+                            "Error",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
                             ),
-                          );
-                        });
+                          ),
+                          content: Text(
+                            controller.errorMessage.value.trim(),
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ).then((_) {
+                        controller.errorMessage.value = "";
+                      });
+                    });
                   }
-                  return DynamicButton.fromText(
-                    text: "Sign up",
+                  return DynamicButton(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Sign up",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        if (controller.isLoading.value)
+                          SizedBox(
+                            height: 17,
+                            width: 17,
+                            child: CircularProgressIndicator(strokeWidth: 3),
+                          )
+                      ],
+                    ),
                     onPressed: () {
                       controller.register(
                         _password.text,

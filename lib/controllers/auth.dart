@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 class AuthController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool authSuccessful = false.obs;
+  RxString errorMessage = "".obs;
   Map data = {};
 
   void register(
@@ -41,16 +42,18 @@ class AuthController extends GetxController {
         print(data);
         authSuccessful.value = true;
       } else {
-        Get.snackbar(
-          "Error",
-          data['message'].join("\n"),
-          backgroundColor: Colors.red,
-        );
-        print("Here");
+        String s = "";
+
+        for (String message in data['message']) {
+          message = message.replaceFirst(
+              message.split('')[0], message.split('')[0].toUpperCase());
+          print("Message is $message");
+          errorMessage.value += "$message \n";
+        }
       }
       print(data);
     } catch (e) {
-      Get.snackbar("Error", "Unable to create account. Please try again");
+      errorMessage.value = "Unable to create account. Please try again";
     }
     isLoading.value = false;
   }
