@@ -2,7 +2,7 @@ import 'package:ecomanga/common/app_colors.dart';
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/common/widgets/custom_text_field.dart';
-import 'package:ecomanga/controllers/auth.dart';
+import 'package:ecomanga/controllers/auth/auth.dart';
 import 'package:ecomanga/features/auth/screens/login_screen.dart';
 import 'package:ecomanga/features/auth/screens/verify_mail_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
@@ -193,17 +193,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 20.h,
                 ),
                 Obx(() {
-                  AuthController controller = Get.find();
+                  RegisterController controller = Get.find();
                   if (controller.authSuccessful.value) {
                     Utils.go(context: context, screen: VerifyEmailScreen());
                   }
                   if (controller.errorMessage.value != "") {
-                    // Get.showSnackbar(GetSnackBar(
-                    //   title: "Error",
-                    //   message: controller.errorMessage.value,
-                    //   duration: Duration(seconds: 2),
-                    // ));
-
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       showDialog(
                         context: context,
