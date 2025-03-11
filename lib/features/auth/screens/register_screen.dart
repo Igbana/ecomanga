@@ -4,7 +4,9 @@ import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/common/widgets/custom_text_field.dart';
 import 'package:ecomanga/controllers/auth.dart';
 import 'package:ecomanga/features/auth/screens/login_screen.dart';
+import 'package:ecomanga/features/auth/screens/verify_mail_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -83,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                       return null;
                     }),
-                    CustomTextField(
+                CustomTextField(
                     hintText: "Username",
                     controller: _username,
                     autofocus: true,
@@ -192,6 +194,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Obx(() {
                   AuthController controller = Get.find();
+                  if (controller.authSuccessful.value) {
+                    Utils.go(context: context, screen: VerifyEmailScreen());
+                  }
+                  if (controller.isLoading.value) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              padding: EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircularProgressIndicator(
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(height: 12),
+                                  Text(
+                                    "Signing in ...",
+                                    style: TextStyle(fontSize: 12),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  }
                   return DynamicButton.fromText(
                     text: "Sign up",
                     onPressed: () {

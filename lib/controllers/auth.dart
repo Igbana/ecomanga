@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 class AuthController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool authSuccessful = false.obs;
   Map data = {};
 
   void register(
@@ -38,6 +39,7 @@ class AuthController extends GetxController {
       data = await json.decode(response.body);
       if (response.statusCode.toString()[0] == "2") {
         print(data);
+        authSuccessful.value = true;
       } else {
         Get.snackbar(
           "Error",
