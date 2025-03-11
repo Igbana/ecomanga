@@ -2,11 +2,13 @@ import 'package:ecomanga/common/app_colors.dart';
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/common/widgets/custom_text_field.dart';
+import 'package:ecomanga/controllers/auth.dart';
 import 'package:ecomanga/features/auth/screens/login_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -173,10 +175,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 20.h,
                 ),
-                DynamicButton.fromText(
-                  text: "Sign up",
-                  onPressed: () {},
-                ),
+                Obx(() {
+                  AuthController controller = Get.find();
+                  return DynamicButton.fromText(
+                    text: "Sign up",
+                    onPressed: () {
+                      controller.register(
+                        _password.text,
+                        _name.text.split(" ")[0],
+                        _name.text.split(" ")[1],
+                        _email.text,
+                        _phone.text,
+                      );
+                    },
+                    isLoading: controller.isLoading.value,
+                  );
+                }),
                 SizedBox(
                   height: 10.h,
                 ),
