@@ -13,11 +13,14 @@ class PrefController extends GetxController {
     if (!_pref!.containsKey('aTk') && !_pref!.containsKey('rTk')) {
       _pref?.setString('aTk', aTk);
       _pref?.setString('rTk', rTk);
+    } else {
+      logout();
+      login(aTk, rTk);
     }
   }
 
-  void logout(String aTk, String rTk) {
-    if (!_pref!.containsKey('aTk') || !_pref!.containsKey('rTk')) {
+  void logout() {
+    if (_pref!.containsKey('aTk') || _pref!.containsKey('rTk')) {
       _pref?.remove('aTk');
       _pref?.remove('rTk');
     }
@@ -27,7 +30,7 @@ class PrefController extends GetxController {
       _pref!.containsKey(aTk) && _pref!.containsKey(aTk);
 
   Map gTk() => {
-        "accessToken": _pref?.getString('aTk') ?? "",
-        "refreshToken": _pref?.getString('rTk') ?? "",
+        "aTk": _pref?.getString('aTk') ?? "",
+        "rTk": _pref?.getString('rTk') ?? "",
       };
 }

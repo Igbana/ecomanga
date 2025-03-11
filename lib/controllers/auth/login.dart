@@ -9,7 +9,7 @@ class LoginController extends GetxController {
   RxString errorMessage = "".obs;
   Map data = {};
 
-  void login({required String password, required String email}) async {
+  Future<List> login({required String password, required String email}) async {
     isLoading.value = true;
 
     try {
@@ -34,5 +34,6 @@ class LoginController extends GetxController {
 
     // turn off loading
     isLoading.value = false;
+    return [data['accessToken'], data['refreshToken']];
   }
 }
