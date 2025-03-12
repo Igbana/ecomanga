@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:ecomanga/utils/utils.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,8 +40,6 @@ class RegisterController extends GetxController {
         print(data);
         authSuccessful.value = true;
       } else {
-        String s = "";
-
         for (String message in data['message']) {
           message = message.replaceFirst(
               message.split('')[0], message.split('')[0].toUpperCase());
@@ -57,6 +53,4 @@ class RegisterController extends GetxController {
     }
     isLoading.value = false;
   }
-
-  
 }
