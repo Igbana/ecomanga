@@ -5,6 +5,7 @@ import 'package:ecomanga/common/widgets/custom_text_field.dart';
 import 'package:ecomanga/controllers/auth/auth.dart';
 import 'package:ecomanga/features/auth/screens/login_screen.dart';
 import 'package:ecomanga/features/auth/screens/verify_mail_screen.dart';
+import 'package:ecomanga/features/home/root_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -40,6 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    GoogleController googleController = Get.find();
+    FacebookController facebookController = Get.find();
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -261,79 +264,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 10.h,
                 ),
-                ScaleButton(
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 5.h,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/icons/google.png",
-                          height: 25.h,
-                          fit: BoxFit.cover,
-                        ),
-                        const Spacer(),
-                        Text(
-                          "Sign up with Google",
-                          style: TextStyle(
-                            fontSize: 16.h,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
+                SocialLoginButton(
+                  controller: googleController,
+                  icon: "assets/icons/google.png",
+                  text: "Sign up with Google",
                 ),
                 SizedBox(
                   height: 10.h,
                 ),
-                ScaleButton(
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 5.h,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/icons/facebook.png",
-                          height: 25.h,
-                          fit: BoxFit.cover,
-                        ),
-                        const Spacer(),
-                        Text(
-                          "Sign up with Facebook",
-                          style: TextStyle(
-                            fontSize: 16.h,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
+                SocialLoginButton(
+                  controller: facebookController,
+                  icon: "assets/icons/facebook.png",
+                  text: "Sign up with Facebook",
                 ),
+                // ScaleButton(
+                //   onTap: () {},
+                //   child: Container(
+                //     padding: EdgeInsets.symmetric(
+                //       horizontal: 10.w,
+                //       vertical: 5.h,
+                //     ),
+                //     decoration: BoxDecoration(
+                //       border: Border.all(
+                //         color: Colors.grey,
+                //       ),
+                //       borderRadius: BorderRadius.circular(4),
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         Image.asset(
+                //           "assets/icons/facebook.png",
+                //           height: 25.h,
+                //           fit: BoxFit.cover,
+                //         ),
+                //         const Spacer(),
+                //         Text(
+                //           "Sign up with Facebook",
+                //           style: TextStyle(
+                //             fontSize: 16.h,
+                //             color: Colors.black,
+                //           ),
+                //         ),
+                //         const Spacer(),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 SizedBox(
                   height: 70.h,
                 ),
@@ -437,5 +415,90 @@ class _RegisterScreenState extends State<RegisterScreen> {
       text,
       style: TextStyle(fontSize: 14.sp, color: Colors.black),
     );
+  }
+}
+
+class SocialLoginButton extends StatelessWidget {
+  const SocialLoginButton({
+    super.key,
+    required this.controller,
+    required this.icon,
+    required this.text,
+  });
+
+  final controller;
+  final String icon, text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (controller.authSuccessful.value) {
+        Utils.go(context: context, screen: RootScreen());
+      }
+      if (controller.errorMessage.value != "") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: Colors.red[900],
+              title: Text(
+                "Error",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+              content: Text(
+                controller.errorMessage.value.trim(),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ).then((_) {
+            controller.errorMessage.value = "";
+          });
+        });
+      }
+      return ScaleButton(
+        onTap: () {
+          controller.login();
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 10.w,
+            vertical: 5.h,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+            ),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                icon,
+                height: 25.h,
+                fit: BoxFit.cover,
+              ),
+              const Spacer(),
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 16.h,
+                  color: Colors.black,
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

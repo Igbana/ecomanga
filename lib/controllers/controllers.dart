@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 
 Future<void> initControllers() async {
   Get.put(PrefController()).initPref();
+
   Get.put(RegisterController());
   Get.put(LoginController());
+  Get.put(GoogleController());
+  Get.put(FacebookController());
 }
