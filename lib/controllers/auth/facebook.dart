@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:ecomanga/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
 
 class FacebookController extends GetxController {
   RxBool isLoading = false.obs;

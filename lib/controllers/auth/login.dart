@@ -34,6 +34,6 @@ class LoginController extends GetxController {
 
     // turn off loading
     isLoading.value = false;
-    return [data['accessToken'], data['refreshToken']];
+    return [data['accessToken'], data['refreshToken'], data['userId']];
   }
 }
