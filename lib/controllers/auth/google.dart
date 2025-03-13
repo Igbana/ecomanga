@@ -3,26 +3,26 @@ import 'package:ecomanga/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class LoginController extends GetxController {
+class GoogleController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool authSuccessful = false.obs;
   RxString errorMessage = "".obs;
   Map data = {};
 
-  Future<List> login({required String password, required String email}) async {
+  Future<List> login() async {
     isLoading.value = true;
 
     try {
       // POST REQUEST
-      final response = await http.post(
-        Urls.auth_login,
-        body: {"email": email, "password": password},
+      final response = await http.get(
+        Urls.auth_google,
       );
       data = await json.decode(response.body);
 
       if (response.statusCode.toString()[0] == "2") {
         // auth successful
-        authSuccessful.value = true;
+        // authSuccessful.value = true;
+        print(data);
       } else {
         // response error handling
         errorMessage.value = data['message'];
@@ -34,6 +34,6 @@ class LoginController extends GetxController {
 
     // turn off loading
     isLoading.value = false;
-    return [data['accessToken'], data['refreshToken'], data['userId']];
+    return [data['accessToken'], data['refreshToken']];
   }
 }

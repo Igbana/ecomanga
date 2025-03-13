@@ -2,12 +2,9 @@ import 'package:ecomanga/common/app_colors.dart';
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/common/widgets/custom_text_field.dart';
-import 'package:ecomanga/controllers/auth/auth.dart';
 import 'package:ecomanga/controllers/controllers.dart';
-import 'package:ecomanga/controllers/shared_pref/shared_pref.dart';
 import 'package:ecomanga/features/auth/screens/register_screen.dart';
-import 'package:ecomanga/features/auth/screens/verify_mail_screen.dart';
-import 'package:ecomanga/features/home/home_screen.dart';
+
 import 'package:ecomanga/features/home/root_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -196,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         email: _email.text,
                       );
                       if (loginController.authSuccessful.value) {
-                        prefController.login(resp[0], resp[1]);
+                        prefController.login(resp[0], resp[1], resp[2]);
                         print(prefController.gTk());
                         Utils.go(context: context, screen: const RootScreen());
                       }
