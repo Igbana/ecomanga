@@ -1,5 +1,4 @@
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
-import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/features/community/community_feed_screen.dart';
 import 'package:ecomanga/features/community/create_communitu_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';

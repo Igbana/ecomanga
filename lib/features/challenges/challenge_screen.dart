@@ -1,5 +1,4 @@
 import 'package:ecomanga/common/buttons/scale_button.dart';
-import 'package:ecomanga/common/widgets/custom_text_field.dart';
 import 'package:ecomanga/features/challenges/challenge_progress_screen.dart';
 import 'package:ecomanga/features/home/home_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
@@ -243,12 +242,12 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
     );
   }
 
-  IconData _getIconForChallenge(String title) {
-    if (title.contains('Energy')) return Icons.bolt;
-    if (title.contains('Recycle')) return Icons.recycling;
-    if (title.contains('waste')) return Icons.delete_outline;
-    return Icons.eco;
-  }
+  // IconData _getIconForChallenge(String title) {
+  //   if (title.contains('Energy')) return Icons.bolt;
+  //   if (title.contains('Recycle')) return Icons.recycling;
+  //   if (title.contains('waste')) return Icons.delete_outline;
+  //   return Icons.eco;
+  // }
 
   Widget _buildHorizontalProductList(List<ProductItem> products) {
     return SizedBox(

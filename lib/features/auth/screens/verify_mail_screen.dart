@@ -1,5 +1,4 @@
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
-import 'package:ecomanga/features/home/market_place/succss.page.dart';
 import 'package:ecomanga/features/home/root_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/gestures.dart';
