@@ -10,15 +10,13 @@ class ProfileController extends GetxController {
   RxBool isLoading = false.obs;
   RxString errorMessage = "".obs;
   Map<String, dynamic> data = {};
-  late User user;
+  late User user, profile;
 
   void getUser() async {
     isLoading.value = true;
 
     try {
-      // POST REQUEST
       final uid = Controllers.prefController.uId;
-      print(uid);
       final response = await http.get(
         Uri.parse("${Urls.users}/$uid"),
         headers: {
@@ -27,23 +25,46 @@ class ProfileController extends GetxController {
         },
       );
       data = await json.decode(response.body);
-      print(data);
 
-      if (response.statusCode.toString()[0] == "2") {
-        // auth successful
+      if (response.statusCode == 200) {
         user = User.fromJson(data);
-        print(user.firstName);
       } else {
-        // response error handling
         errorMessage.value = data['message'];
-        throw Exception("Unauthorized");
+        // throw Exception("Unauthorized");
       }
     } catch (e) {
-      // caught error handling
+      errorMessage.value = e.toString();
+    }
+    isLoading.value = false;
+  }
+
+  void getProfile() async {
+    isLoading.value = true;
+
+    try {
+      final uid = Controllers.prefController.uId;
+      print(uid);
+      final response = await http.get(
+        Urls.profile,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${Controllers.prefController.aTk}',
+        },
+      );
+      data = await json.decode(response.body);
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        print(data['data']);
+        profile = User.fromJson(data['data']);
+      } else {
+        errorMessage.value = data['message'];
+        // throw Exception("Unauthorized");
+      }
+    } catch (e) {
       errorMessage.value = e.toString();
     }
 
-    // turn off loading
     isLoading.value = false;
   }
 }

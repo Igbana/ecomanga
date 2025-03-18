@@ -1,15 +1,15 @@
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
-import 'package:ecomanga/controllers/profile/profile.dart';
-import 'package:ecomanga/models/models.dart';
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'widgets/widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ProfileController profileController = Get.find();
+    Controllers.profileController.getProfile();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -98,25 +98,7 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Obx(() {
-                            profileController.getUser();
-                            if (profileController.isLoading.value) {
-                              return Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                ),
-                              );
-                            } else {
-                              return Text(
-                                "${profileController.user.firstName} ${profileController.user.lastName}",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              );
-                            }
-                          }),
+                          ProfileName(),
                           TextButton(
                             onPressed: () {},
                             style: TextButton.styleFrom(
@@ -150,13 +132,42 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 6),
-                _buildSettingsItem('Fullname', 'Jayce Rodrygo'),
+                // _buildSettingsItem('Fullname', 'Jayce Rodrygo'),
+                // _buildSettingsItem('Display name', 'TheRealJayce'),
+                // _buildSettingsItem('Email address', 'Jaycero@gmail.com'),
+                // _buildSettingsItem('Gender', 'Male'),
+                // _buildSettingsItem('Age', '32'),
+                // _buildSettingsItem('Password', '••••••••••'),
 
-                _buildSettingsItem('Display name', 'TheRealJayce'),
-                _buildSettingsItem('Email address', 'Jaycero@gmail.com'),
-                _buildSettingsItem('Gender', 'Male'),
-                _buildSettingsItem('Age', '32'),
-                _buildSettingsItem('Password', '••••••••••'),
+                Obx(() {
+                  if (Controllers.profileController.isLoading.value) {
+                    return Column(
+                      children: [
+                        _buildSettingsItem('Fullname', "---"),
+                        _buildSettingsItem('Display name', "---"),
+                        _buildSettingsItem('Email address', "---"),
+                        _buildSettingsItem('Gender', "---"),
+                        _buildSettingsItem('Age', "---"),
+                      ],
+                    );
+                  } else
+                    return Column(
+                      children: [
+                        _buildSettingsItem('Fullname',
+                            Controllers.profileController.profile.email),
+                        _buildSettingsItem('Display name',
+                            Controllers.profileController.profile.username),
+                        _buildSettingsItem('Email address',
+                            Controllers.profileController.profile.email),
+                        _buildSettingsItem(
+                            'Gender',
+                            Controllers.profileController.profile.gender
+                                .toString()
+                                .capitalizeFirst!),
+                        _buildSettingsItem('Age', '32'),
+                      ],
+                    );
+                }),
                 const Divider(
                   color: Colors.grey,
                 ),
