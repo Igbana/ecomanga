@@ -6,17 +6,18 @@ class Post {
     required this.title,
     required this.description,
     required this.content,
-    required this.image,
+    this.image,
     required this.author,
     required this.id,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  final String slug, title, description, content, image;
+  final String slug, title, description, content;
+  final String? image;
   final User author;
   final String id;
-  final String createdAt, updatedAt;
+  final DateTime createdAt, updatedAt;
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,8 +42,8 @@ class Post {
       image: json['image'],
       author: json['author'],
       id: json['id'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
