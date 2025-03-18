@@ -2,7 +2,6 @@ import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/controllers/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'widgets/widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -98,7 +97,20 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ProfileName(),
+                          Obx(
+                            () {
+                              return Text(
+                                Controllers.profileController.isLoading.value
+                                    ? " -- "
+                                    : Controllers
+                                        .profileController.profile.fullName,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            },
+                          ),
                           TextButton(
                             onPressed: () {},
                             style: TextButton.styleFrom(
@@ -154,7 +166,7 @@ class ProfileScreen extends StatelessWidget {
                     return Column(
                       children: [
                         _buildSettingsItem('Fullname',
-                            Controllers.profileController.profile.email),
+                            Controllers.profileController.profile.fullName),
                         _buildSettingsItem('Display name',
                             Controllers.profileController.profile.username),
                         _buildSettingsItem('Email address',

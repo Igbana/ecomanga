@@ -39,6 +39,9 @@ class User {
   final List shippingAddresses, badges, communities, followers;
   final List socialAccounts, challenges;
 
+  String get fullName => "${firstName} ${lastName}";
+  // String get age => DateTime.now().difference(dob);
+
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
