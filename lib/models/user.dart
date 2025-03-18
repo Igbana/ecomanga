@@ -2,7 +2,6 @@ import 'package:ecomanga/models/models.dart';
 
 class User {
   const User({
-    required this.id,
     required this.userId,
     required this.email,
     required this.username,
@@ -13,12 +12,12 @@ class User {
     required this.role,
     required this.balance,
     required this.gender,
-    required this.dob,
-    required this.isBlockedUntil,
-    required this.emailVerifiedAt,
-    required this.phoneNoVerifiedAt,
+    this.dob,
+    this.isBlockedUntil,
+    this.emailVerifiedAt,
+    this.phoneNoVerifiedAt,
     required this.joinedAt,
-    required this.updatedAt,
+    this.updatedAt,
     required this.isVerified,
     this.shippingAddresses = const [],
     this.badges = const [],
@@ -27,20 +26,24 @@ class User {
     this.socialAccounts = const [],
     this.challenges = const [],
   });
-  final String id, userId, email, username, firstName;
-  final String lastName, phoneNo, picture;
+  final String userId, email, username, firstName;
+  final String lastName, phoneNo;
+  final String? picture;
   final Role role;
   final int balance;
-  final Gender gender;
-  final DateTime dob, isBlockedUntil, emailVerifiedAt;
-  final DateTime phoneNoVerifiedAt, joinedAt, updatedAt;
+  final Gender? gender;
+  final DateTime joinedAt;
+  final DateTime? dob, isBlockedUntil, emailVerifiedAt;
+  final DateTime? phoneNoVerifiedAt, updatedAt;
   final bool isVerified;
   final List shippingAddresses, badges, communities, followers;
   final List socialAccounts, challenges;
 
+  String get fullName => "${firstName} ${lastName}";
+  // String get age => DateTime.now().difference(dob);
+
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'userId': userId,
       'email': email,
       'username': username,
@@ -69,7 +72,6 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
       userId: json['userId'],
       email: json['email'],
       username: json['username'],
@@ -77,22 +79,30 @@ class User {
       lastName: json['lastName'],
       phoneNo: json['phoneNo'],
       picture: json['picture'],
-      role: json['role'],
+      role: switch (json['role']) {
+        'user' => Role.user,
+        'admin' => Role.admin,
+        _ => Role.guest,
+      },
       balance: json['balance'],
-      gender: json['gender'],
-      dob: json['dob'],
-      isBlockedUntil: json['isBlockedUntil'],
-      emailVerifiedAt: json['emailVerifiedAt'],
-      phoneNoVerifiedAt: json['phoneNoVerifiedAt'],
-      joinedAt: json['joinedAt'],
-      updatedAt: json['updatedAt'],
+      gender: switch (json['gender']) {
+        'user' => Gender.male,
+        'admin' => Gender.female,
+        _ => null,
+      },
+      dob: DateTime.tryParse(json['dob'] ?? ""),
+      isBlockedUntil: DateTime.tryParse(json['isBlockedUntil'] ?? ""),
       isVerified: json['isVerified'],
-      shippingAddresses: json['shippingAddresses'],
-      badges: json['badges'],
-      communities: json['communities'],
-      followers: json['followers'],
-      socialAccounts: json['socialAccounts'],
-      challenges: json['challenges'],
+      emailVerifiedAt: DateTime.tryParse(json['emailVerifiedAt'] ?? ""),
+      phoneNoVerifiedAt: DateTime.tryParse(json['phoneNoVerifiedAt'] ?? ""),
+      joinedAt: DateTime.parse(json['joinedAt'] ?? ""),
+      updatedAt: DateTime.tryParse(json['updatedAt'] ?? ""),
+      shippingAddresses: json['shippingAddresses'] ?? [],
+      badges: json['badges'] ?? [],
+      communities: json['communities'] ?? [],
+      followers: json['followers'] ?? [],
+      socialAccounts: json['socialAccounts'] ?? [],
+      challenges: json['challenges'] ?? [],
     );
   }
 }

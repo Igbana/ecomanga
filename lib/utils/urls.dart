@@ -8,12 +8,8 @@ class Urls {
       Uri.parse("${Constants.BASE_URL}/auth/google/");
   static final Uri auth_facebook =
       Uri.parse("${Constants.BASE_URL}/auth/facebook/");
-  
-  
-  
-  
-  static final Uri auth_login = Uri.parse("${Constants.BASE_URL}/auth/login");
 
+  static final Uri auth_login = Uri.parse("${Constants.BASE_URL}/auth/login");
 
   static final Uri auth_logout =
       Uri.parse("${Constants.BASE_URL}/auth/logout/");
@@ -28,5 +24,11 @@ class Urls {
   static final Uri auth_passwordReset =
       Uri.parse("${Constants.BASE_URL}/auth/password/reset/");
 
-  static final users = Uri.parse("${Constants.BASE_URL}/users/");
+  static final String users = "${Constants.BASE_URL}/users/";
+
+  static final Uri profile = Uri.parse("${Constants.BASE_URL}/profile/");
+  static final Uri profile_picture =
+      Uri.parse("${Constants.BASE_URL}/profile/picture");
+  static final Uri profile_follow =
+      Uri.parse("${Constants.BASE_URL}/profile/follow");
 }

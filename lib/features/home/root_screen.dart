@@ -22,7 +22,7 @@ class _RootScreenState extends State<RootScreen> {
     const HomeScreen(),
     const ChallengeScreen(),
     const CommunityScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
   int selectedIndex = 0;
   final PageStorageBucket bucket = PageStorageBucket();
@@ -170,7 +170,7 @@ class _RootScreenState extends State<RootScreen> {
                 scale: .97,
                 onTap: () {
                   setState(() {
-                    currentScreen = const ProfileScreen();
+                    currentScreen = ProfileScreen();
                     selectedIndex = 3;
                   });
                 },

@@ -1,5 +1,7 @@
 import 'package:ecomanga/features/auth/screens/register_screen.dart';
-
+import 'package:ecomanga/features/auth/screens/login_screen.dart';
+import 'package:ecomanga/features/home/root_screen.dart';
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -20,13 +22,40 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  _init() async {
-    Future.delayed(const Duration(seconds: 1), () {
-      Utils.go(
-        context: context,
-        screen: const RegisterScreen(),
-        replace: true,
-      );
+  _init() {
+    initControllers().then((_) async {
+      try {
+        Controllers.profileController.getUser();
+        Utils.go(
+          context: context,
+          screen: const RootScreen(),
+          replace: true,
+        );
+      } catch (e) {
+        if (Controllers.prefController.isLoggedin()) {
+          try {
+            await Controllers.loginController.refreshAuth().then((_) {
+              Utils.go(
+                context: context,
+                screen: const RootScreen(),
+                replace: true,
+              );
+            });
+          } catch (e) {
+            Utils.go(
+              context: context,
+              screen: const LoginScreen(),
+              replace: true,
+            );
+          }
+        } else {
+          Utils.go(
+            context: context,
+            screen: const RegisterScreen(),
+            replace: true,
+          );
+        }
+      }
     });
 
     // FirebaseAuth.instance.currentUser == null

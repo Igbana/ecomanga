@@ -1,11 +1,14 @@
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Controllers.profileController.getProfile();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -94,12 +97,19 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Jayce Rodrygo',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Obx(
+                            () {
+                              return Text(
+                                Controllers.profileController.isLoading.value
+                                    ? " -- "
+                                    : Controllers
+                                        .profileController.profile.fullName,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            },
                           ),
                           TextButton(
                             onPressed: () {},
@@ -134,13 +144,42 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 6),
-                _buildSettingsItem('Fullname', 'Jayce Rodrygo'),
+                // _buildSettingsItem('Fullname', 'Jayce Rodrygo'),
+                // _buildSettingsItem('Display name', 'TheRealJayce'),
+                // _buildSettingsItem('Email address', 'Jaycero@gmail.com'),
+                // _buildSettingsItem('Gender', 'Male'),
+                // _buildSettingsItem('Age', '32'),
+                // _buildSettingsItem('Password', '••••••••••'),
 
-                _buildSettingsItem('Display name', 'TheRealJayce'),
-                _buildSettingsItem('Email address', 'Jaycero@gmail.com'),
-                _buildSettingsItem('Gender', 'Male'),
-                _buildSettingsItem('Age', '32'),
-                _buildSettingsItem('Password', '••••••••••'),
+                Obx(() {
+                  if (Controllers.profileController.isLoading.value) {
+                    return Column(
+                      children: [
+                        _buildSettingsItem('Fullname', "---"),
+                        _buildSettingsItem('Display name', "---"),
+                        _buildSettingsItem('Email address', "---"),
+                        _buildSettingsItem('Gender', "---"),
+                        _buildSettingsItem('Age', "---"),
+                      ],
+                    );
+                  } else
+                    return Column(
+                      children: [
+                        _buildSettingsItem('Fullname',
+                            Controllers.profileController.profile.fullName),
+                        _buildSettingsItem('Display name',
+                            Controllers.profileController.profile.username),
+                        _buildSettingsItem('Email address',
+                            Controllers.profileController.profile.email),
+                        _buildSettingsItem(
+                            'Gender',
+                            Controllers.profileController.profile.gender
+                                .toString()
+                                .capitalizeFirst!),
+                        _buildSettingsItem('Age', '32'),
+                      ],
+                    );
+                }),
                 const Divider(
                   color: Colors.grey,
                 ),

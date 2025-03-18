@@ -6,7 +6,9 @@ class PrefController extends GetxController {
   RxBool isloading = false.obs;
 
   void initPref() async {
+    isloading.value = true;
     _pref = await SharedPreferences.getInstance();
+    isloading.value = false;
   }
 
   void login(String aTk, String rTk, String uId) {
@@ -20,6 +22,13 @@ class PrefController extends GetxController {
     }
   }
 
+  void refrsh(String aTk) {
+    if (_pref!.containsKey('aTk')) {
+      _pref?.remove('aTk');
+      _pref?.setString('aTk', aTk);
+    }
+  }
+
   void logout() {
     if (_pref!.containsKey('aTk') || _pref!.containsKey('rTk')) {
       _pref?.remove('aTk');
@@ -28,12 +37,18 @@ class PrefController extends GetxController {
     }
   }
 
-  bool isLoggedin(String aTk, String rTk) =>
-      _pref!.containsKey(aTk) && _pref!.containsKey(aTk);
+  bool isLoggedin() =>
+      _pref!.containsKey('aTk') &&
+      _pref!.containsKey('rTk') &&
+      _pref!.containsKey('uId');
 
-  Map gTk() => {
-        "aTk": _pref?.getString('aTk') ?? "",
-        "rTk": _pref?.getString('rTk') ?? "",
-        "uId": _pref?.getString('uId') ?? "",
-      };
+  // Map gTk() => {
+  //       "aTk": _pref?.getString('aTk') ?? "",
+  //       "rTk": _pref?.getString('rTk') ?? "",
+  //       "uId": _pref?.getString('uId') ?? "",
+  //     };
+
+  String get aTk => _pref?.getString('aTk') ?? "";
+  String get rTk => _pref?.getString('rTk') ?? "";
+  String get uId => _pref?.getString('uId') ?? "";
 }
