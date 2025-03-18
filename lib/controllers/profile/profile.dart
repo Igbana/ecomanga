@@ -16,7 +16,7 @@ class ProfileController extends GetxController {
 
     try {
       // POST REQUEST
-      final response = await http.get(Urls.auth_login);
+      final response = await http.get(Urls.users);
       data = await json.decode(response.body);
 
       if (response.statusCode.toString()[0] == "2") {

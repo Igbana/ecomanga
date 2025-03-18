@@ -194,7 +194,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                       if (loginController.authSuccessful.value) {
                         prefController.login(resp[0], resp[1], resp[2]);
-                        print(prefController.gTk());
                         Utils.go(context: context, screen: const RootScreen());
                       }
                     },

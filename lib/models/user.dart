@@ -9,17 +9,17 @@ class User {
     required this.firstName,
     required this.lastName,
     required this.phoneNo,
-    required this.picture,
+    this.picture,
     required this.role,
-    required this.balance,
-    required this.gender,
-    required this.dob,
-    required this.isBlockedUntil,
-    required this.emailVerifiedAt,
-    required this.phoneNoVerifiedAt,
+    this.balance,
+    this.gender,
+    this.dob,
+    this.isBlockedUntil,
+    this.emailVerifiedAt,
+    this.phoneNoVerifiedAt,
     required this.joinedAt,
-    required this.updatedAt,
-    required this.isVerified,
+    this.updatedAt,
+    this.isVerified,
     this.shippingAddresses = const [],
     this.badges = const [],
     this.communities = const [],
@@ -28,15 +28,17 @@ class User {
     this.challenges = const [],
   });
   final String id, userId, email, username, firstName;
-  final String lastName, phoneNo, picture;
+  final String lastName, phoneNo;
+  final String? picture;
   final Role role;
-  final int balance;
-  final Gender gender;
-  final DateTime dob, isBlockedUntil, emailVerifiedAt;
-  final DateTime phoneNoVerifiedAt, joinedAt, updatedAt;
-  final bool isVerified;
-  final List shippingAddresses, badges, communities, followers;
-  final List socialAccounts, challenges;
+  final int? balance;
+  final Gender? gender;
+  final DateTime joinedAt;
+  final DateTime? dob, isBlockedUntil, emailVerifiedAt;
+  final DateTime? phoneNoVerifiedAt, updatedAt;
+  final bool? isVerified;
+  final List? shippingAddresses, badges, communities, followers;
+  final List? socialAccounts, challenges;
 
   Map<String, dynamic> toJson() {
     return {
@@ -75,24 +77,24 @@ class User {
       username: json['username'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      phoneNo: json['phoneNo'],
       picture: json['picture'],
       role: json['role'],
-      balance: json['balance'],
       gender: json['gender'],
-      dob: json['dob'],
-      isBlockedUntil: json['isBlockedUntil'],
-      emailVerifiedAt: json['emailVerifiedAt'],
-      phoneNoVerifiedAt: json['phoneNoVerifiedAt'],
+      phoneNo: json['phoneNo'],
       joinedAt: json['joinedAt'],
-      updatedAt: json['updatedAt'],
-      isVerified: json['isVerified'],
-      shippingAddresses: json['shippingAddresses'],
-      badges: json['badges'],
-      communities: json['communities'],
-      followers: json['followers'],
-      socialAccounts: json['socialAccounts'],
-      challenges: json['challenges'],
+      balance: json['balance'] ?? "",
+      dob: json['dob'] ?? "",
+      isBlockedUntil: json['isBlockedUntil'] ?? "",
+      emailVerifiedAt: json['emailVerifiedAt'] ?? "",
+      phoneNoVerifiedAt: json['phoneNoVerifiedAt'] ?? "",
+      updatedAt: json['updatedAt'] ?? "",
+      isVerified: json['isVerified'] ?? "",
+      shippingAddresses: json['shippingAddresses'] ?? "",
+      badges: json['badges'] ?? "",
+      communities: json['communities'] ?? "",
+      followers: json['followers'] ?? "",
+      socialAccounts: json['socialAccounts'] ?? "",
+      challenges: json['challenges'] ?? "",
     );
   }
 }
