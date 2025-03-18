@@ -1,11 +1,15 @@
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
+import 'package:ecomanga/controllers/profile/profile.dart';
+import 'package:ecomanga/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    ProfileController profileController = Get.find();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -94,13 +98,25 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Jayce Rodrygo',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Obx(() {
+                            profileController.getUser();
+                            if (profileController.isLoading.value) {
+                              return Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                ),
+                              );
+                            } else {
+                              return Text(
+                                "${profileController.user.firstName} ${profileController.user.lastName}",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                          }),
                           TextButton(
                             onPressed: () {},
                             style: TextButton.styleFrom(

@@ -1,4 +1,6 @@
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:ecomanga/utils/utils.dart';
+import 'package:get/get.dart';
 
 class Urls {
   static final Uri app = Uri.parse(Constants.BASE_URL);
@@ -8,12 +10,8 @@ class Urls {
       Uri.parse("${Constants.BASE_URL}/auth/google/");
   static final Uri auth_facebook =
       Uri.parse("${Constants.BASE_URL}/auth/facebook/");
-  
-  
-  
-  
-  static final Uri auth_login = Uri.parse("${Constants.BASE_URL}/auth/login");
 
+  static final Uri auth_login = Uri.parse("${Constants.BASE_URL}/auth/login");
 
   static final Uri auth_logout =
       Uri.parse("${Constants.BASE_URL}/auth/logout/");
@@ -28,5 +26,5 @@ class Urls {
   static final Uri auth_passwordReset =
       Uri.parse("${Constants.BASE_URL}/auth/password/reset/");
 
-  static final users = Uri.parse("${Constants.BASE_URL}/users/");
+  static final String users = "${Constants.BASE_URL}/users/";
 }

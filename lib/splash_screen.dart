@@ -1,10 +1,9 @@
-import 'package:ecomanga/controllers/controllers.dart';
 import 'package:ecomanga/features/auth/screens/register_screen.dart';
+import 'package:ecomanga/features/auth/screens/login_screen.dart';
 import 'package:ecomanga/features/home/root_screen.dart';
-
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,29 +22,41 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  _init() async {
-    PrefController prefController = Get.find();
-    LoginController loginController = Get.find();
-    if (prefController.isLoggedin()) {
+  _init() {
+    initControllers().then((_) async {
       try {
-        await loginController.refreshAuth().then((_) {
-          Utils.go(
-            context: context,
-            screen: const RootScreen(),
-            replace: true,
-          );
-        });
-      } catch (e) {
+        Controllers.profileController.getUser();
         Utils.go(
           context: context,
-          screen: const RegisterScreen(),
+          screen: const RootScreen(),
           replace: true,
         );
+      } catch (e) {
+        if (Controllers.prefController.isLoggedin()) {
+          try {
+            await Controllers.loginController.refreshAuth().then((_) {
+              Utils.go(
+                context: context,
+                screen: const RootScreen(),
+                replace: true,
+              );
+            });
+          } catch (e) {
+            Utils.go(
+              context: context,
+              screen: const LoginScreen(),
+              replace: true,
+            );
+          }
+        } else {
+          Utils.go(
+            context: context,
+            screen: const RegisterScreen(),
+            replace: true,
+          );
+        }
       }
-    }
-    // Future.delayed(const Duration(seconds: 1), () {
-
-    // });
+    });
 
     // FirebaseAuth.instance.currentUser == null
     //     ? Utils.go(

@@ -6,7 +6,9 @@ class PrefController extends GetxController {
   RxBool isloading = false.obs;
 
   void initPref() async {
+    isloading.value = true;
     _pref = await SharedPreferences.getInstance();
+    isloading.value = false;
   }
 
   void login(String aTk, String rTk, String uId) {
@@ -21,8 +23,10 @@ class PrefController extends GetxController {
   }
 
   void refrsh(String aTk) {
-    _pref?.remove('aTk');
-    _pref?.setString('aTk', aTk);
+    if (_pref!.containsKey('aTk')) {
+      _pref?.remove('aTk');
+      _pref?.setString('aTk', aTk);
+    }
   }
 
   void logout() {
@@ -33,7 +37,10 @@ class PrefController extends GetxController {
     }
   }
 
-  bool isLoggedin() => _pref!.containsKey('aTk') && _pref!.containsKey('rTk');
+  bool isLoggedin() =>
+      _pref!.containsKey('aTk') &&
+      _pref!.containsKey('rTk') &&
+      _pref!.containsKey('uId');
 
   // Map gTk() => {
   //       "aTk": _pref?.getString('aTk') ?? "",
