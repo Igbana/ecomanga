@@ -1,5 +1,3 @@
-import 'package:ecomanga/models/models.dart';
-
 class Post {
   const Post({
     required this.slug,

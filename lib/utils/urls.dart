@@ -31,4 +31,6 @@ class Urls {
       Uri.parse("${Constants.BASE_URL}/profile/picture");
   static final Uri profile_follow =
       Uri.parse("${Constants.BASE_URL}/profile/follow");
+
+  static final Uri post = Uri.parse("${Constants.BASE_URL}/post");
 }

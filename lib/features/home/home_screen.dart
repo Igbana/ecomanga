@@ -3,10 +3,12 @@ import 'package:ecomanga/common/app_colors.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/common/widgets/news_datails_page.dart';
 import 'package:ecomanga/common/widgets/product_detail_page.dart';
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:ecomanga/features/home/SocialPostScreen.dart';
 import 'package:ecomanga/features/home/create_post_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -318,15 +320,19 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
+                Obx(() {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
+                      ),
                     ),
-                  ),
-                  title: Text('Jayce Rodrygo'),
-                  subtitle: Text('3 days ago'),
-                ),
+                    title: Text(Controllers.profileController.isLoading.value
+                        ? "--"
+                        : "Controllers.profileController.user.fullName"),
+                    subtitle: Text('3 days ago'),
+                  );
+                }),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
