@@ -15,7 +15,7 @@ class Post {
 
   final String slug, title, description, content;
   final String? image;
-  final User author;
+  final String author;
   final String id;
   final DateTime createdAt, updatedAt;
 
@@ -26,7 +26,7 @@ class Post {
       'description': description,
       'content': content,
       'image': image,
-      'author': author.toJson(),
+      'author': author,
       'id': id,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
