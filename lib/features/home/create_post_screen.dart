@@ -1,8 +1,10 @@
 // create_post_page.dart
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
@@ -14,6 +16,7 @@ class CreatePostPage extends StatefulWidget {
 class _CreatePostPageState extends State<CreatePostPage> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController _descriptionController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -59,8 +62,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ],
             ),
             SizedBox(height: 20.h),
-            const TextField(
+            TextField(
               maxLines: 7,
+              controller: _descriptionController,
               decoration: InputDecoration(
                 hintText: 'What do you think?',
                 border: OutlineInputBorder(),
@@ -87,7 +91,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ),
             ),
             const Spacer(),
-            DynamicButton.fromText(text: "Post", onPressed: () {}),
+            Obx(() {
+              return DynamicButton(
+                isLoading: Controllers.postController.isLoading.value,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Post",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    if (Controllers.postController.isLoading.value)
+                      SizedBox(
+                        height: 17,
+                        width: 17,
+                        child: CircularProgressIndicator(strokeWidth: 3),
+                      )
+                  ],
+                ),
+                onPressed: () {},
+              );
+            }),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             ),

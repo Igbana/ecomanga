@@ -337,27 +337,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
                         ),
                       ),
-                      title: Obx(
-                        () => Text(
-                          Controllers.profileController.isLoading.value
-                              ? "--"
-                              : Controllers.postController.posts[index].author,
-                        ),
+                      title: Text(
+                        Controllers.profileController.isLoading.value
+                            ? "--"
+                            : Controllers.postController.posts[index].author,
                       ),
-                      subtitle: Obx(
-                        () => Text(
-                          Controllers.profileController.isLoading.value
-                              ? "--"
-                              : Controllers
-                                  .postController.posts[index].createdAt
-                                  .toIso8601String(), // 3 days ago
-                        ),
+                      subtitle: Text(
+                        Controllers.profileController.isLoading.value
+                            ? "--"
+                            : Controllers.postController.posts[index].createdAt
+                                .toIso8601String(), // 3 days ago
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                        Controllers.profileController.isLoading.value
+                            ? "--"
+                            : Controllers
+                                .postController.posts[index].description,
                       ),
                     ),
                     const SizedBox(height: 8),

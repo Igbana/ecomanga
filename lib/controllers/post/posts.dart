@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 class PostController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isSuccessful = false.obs;
   RxString errorMessage = "".obs;
   Map<String, dynamic> data = {};
   List<Post> posts = [];
@@ -29,6 +30,37 @@ class PostController extends GetxController {
       if (response.statusCode == 200) {
         print(data['data']);
         data['data'].forEach((post) => posts.add(Post.fromJson(post)));
+      } else {
+        errorMessage.value = data['message'];
+        // throw Exception("Unauthorized");
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+    }
+
+    isLoading.value = false;
+  }
+
+  void createPost(Post post) async {
+    isLoading.value = true;
+
+    try {
+      final response = await http.post(
+        Urls.post,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${Controllers.prefController.aTk}',
+        },
+        body: {
+          "title": post.title,
+          "content": post.description,
+        },
+      );
+      data = await json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        isSuccessful.value = true;
       } else {
         errorMessage.value = data['message'];
         // throw Exception("Unauthorized");
