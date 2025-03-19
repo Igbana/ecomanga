@@ -30,6 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    Controllers.postController.getPosts();
+    print(Controllers.postController.posts);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Screen Height
     final screenHeight = MediaQuery.of(context).size.height;
@@ -297,7 +304,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Posts Section
   Widget _buildPosts() {
-    Controllers.postController.getPosts();
     return Obx(() {
       if (Controllers.postController.isLoading.value) {
         return Center(child: Text("No post"));

@@ -10,7 +10,7 @@ class PostController extends GetxController {
   RxBool isLoading = false.obs;
   RxString errorMessage = "".obs;
   Map<String, dynamic> data = {};
-  late List<Post> posts;
+  List<Post> posts = [];
 
   void getPosts() async {
     isLoading.value = true;
@@ -28,7 +28,6 @@ class PostController extends GetxController {
 
       if (response.statusCode == 200) {
         print(data['data']);
-        List<Post> posts = [];
         data['data'].forEach((post) => posts.add(Post.fromJson(post)));
       } else {
         errorMessage.value = data['message'];
