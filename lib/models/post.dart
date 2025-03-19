@@ -3,18 +3,19 @@ class Post {
     required this.slug,
     required this.title,
     required this.description,
-    required this.content,
-    this.image,
+    // required this.content,
+    required this.image,
     required this.author,
     required this.id,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  final String slug, title, description, content;
+  final String slug, title, description;
+  // final String content;
   final String? image;
   final String author;
-  final String id;
+  final int id;
   final DateTime createdAt, updatedAt;
 
   Map<String, dynamic> toMap() {
@@ -22,7 +23,7 @@ class Post {
       'slug': slug,
       'title': title,
       'description': description,
-      'content': content,
+      // 'content': content,
       'image': image,
       'author': author,
       'id': id,
@@ -33,15 +34,15 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      slug: json['slug'],
+      id: json['id'],
       title: json['title'],
+      slug: json['slug'],
       description: json['description'],
-      content: json['content'],
+      // content: json['content'],
       image: json['image'],
       author: json['author'],
-      id: json['id'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: DateTime.parse(json['createdAt'] ?? ""),
+      updatedAt: DateTime.parse(json['updatedAt'] ?? ""),
     );
   }
 }

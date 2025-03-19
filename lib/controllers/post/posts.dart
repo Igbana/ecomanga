@@ -25,13 +25,11 @@ class PostController extends GetxController {
         },
       );
       data = await json.decode(response.body);
-      data = await json.decode(response.body);
-      print(response.statusCode);
 
       if (response.statusCode == 200) {
         print(data['data']);
-        posts = data['data'].forEach((post) => Post.fromJson(post));
-        print(posts[0].author);
+        List<Post> posts = [];
+        data['data'].forEach((post) => posts.add(Post.fromJson(post)));
       } else {
         errorMessage.value = data['message'];
         // throw Exception("Unauthorized");

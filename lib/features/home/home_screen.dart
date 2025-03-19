@@ -297,115 +297,132 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Posts Section
   Widget _buildPosts() {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade300,
-                  blurRadius: 6,
-                  spreadRadius: 2,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(() {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
-                      ),
+    Controllers.postController.getPosts();
+    return Obx(() {
+      if (Controllers.postController.isLoading.value) {
+        return Center(child: Text("No post"));
+      } else
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: Controllers.postController.posts.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 6,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 3),
                     ),
-                    title: Text(Controllers.profileController.isLoading.value
-                        ? "--"
-                        : "Controllers.profileController.user.fullName"),
-                    subtitle: Text('3 days ago'),
-                  );
-                }),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 200,
-                  child: ScaleButton(
-                    onTap: () {
-                      Utils.go(
-                        context: context,
-                        screen: SocialPostScreen(
-                          tag: "post_image_$index.tostrig",
-                          image:
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q",
-                          profileImg:
-                              "https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400",
-                        ),
-                      );
-                    },
-                    child: Hero(
-                      tag: 'post_image_$index',
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
-                        child: Image.network(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.favorite_border_outlined)),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(
-                        onPressed: () {}, icon: Icon(Icons.comment_outlined)),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    ScaleButton(
-                      onTap: () {},
-                      child: Image.asset(
-                        "assets/icons/send.png",
-                        height: 40,
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
+                        ),
                       ),
+                      title: Obx(
+                        () => Text(
+                          Controllers.profileController.isLoading.value
+                              ? "--"
+                              : Controllers.postController.posts[index].author,
+                        ),
+                      ),
+                      subtitle: Obx(
+                        () => Text(
+                          Controllers.profileController.isLoading.value
+                              ? "--"
+                              : Controllers
+                                  .postController.posts[index].createdAt
+                                  .toIso8601String(), // 3 days ago
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 200,
+                      child: ScaleButton(
+                        onTap: () {
+                          Utils.go(
+                            context: context,
+                            screen: SocialPostScreen(
+                              tag: "post_image_$index.tostrig",
+                              image:
+                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q",
+                              profileImg:
+                                  "https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400",
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: 'post_image_$index',
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8),
+                            ),
+                            child: Image.network(
+                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.favorite_border_outlined)),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.comment_outlined)),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ScaleButton(
+                          onTap: () {},
+                          child: Image.asset(
+                            "assets/icons/send.png",
+                            height: 40,
+                          ),
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         );
-      },
-    );
+    });
   }
 
   // Marketplace Content Placeholder
