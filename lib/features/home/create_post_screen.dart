@@ -54,7 +54,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        Controllers.profileController.isLoading.value
+                        Controllers.profileController
+                                    .isLoading[keys.getProfile] ??
+                                false
                             ? "--"
                             : Controllers.profileController.user!.fullName,
                         style: TextStyle(

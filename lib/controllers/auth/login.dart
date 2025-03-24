@@ -28,7 +28,7 @@ class LoginController extends GetxController {
     return data;
   }
 
-  Future<List> login({required String password, required String email}) async {
+  Future<void> login({required String password, required String email}) async {
     isLoading.value = true;
 
     try {
@@ -43,6 +43,11 @@ class LoginController extends GetxController {
       if (response.statusCode.toString()[0] == "2") {
         // auth successful
         authSuccessful.value = true;
+        Controllers.prefController.login(
+          data['accessToken'],
+          data['refreshToken'],
+          data['userId'],
+        );
       } else {
         // response error handling
         errorMessage.value = data['message'];
@@ -54,6 +59,5 @@ class LoginController extends GetxController {
 
     // turn off loading
     isLoading.value = false;
-    return [data['accessToken'], data['refreshToken'], data['userId']];
   }
 }

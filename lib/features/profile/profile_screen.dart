@@ -100,7 +100,9 @@ class ProfileScreen extends StatelessWidget {
                           Obx(
                             () {
                               return Text(
-                                Controllers.profileController.isLoading.value
+                                Controllers.profileController
+                                            .isLoading[keys.getProfile] ??
+                                        false
                                     ? " -- "
                                     : Controllers
                                         .profileController.profile!.fullName,
@@ -152,7 +154,9 @@ class ProfileScreen extends StatelessWidget {
                 // _buildSettingsItem('Password', '••••••••••'),
 
                 Obx(() {
-                  if (Controllers.profileController.isLoading.value) {
+                  if (Controllers
+                          .profileController.isLoading[keys.getProfile] ??
+                      false) {
                     return Column(
                       children: [
                         _buildSettingsItem('Fullname', "---"),

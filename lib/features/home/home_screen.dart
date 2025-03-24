@@ -339,12 +339,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       title: Text(
-                        Controllers.profileController.isLoading.value
+                        Controllers.profileController
+                                    .isLoading[keys.getProfile] ??
+                                false
                             ? "--"
                             : Controllers.postController.posts[index].author,
                       ),
                       subtitle: Text(
-                        Controllers.profileController.isLoading.value
+                        Controllers.profileController
+                                    .isLoading[keys.getProfile] ??
+                                false
                             ? "--"
                             : Controllers.postController.posts[index].createdAt
                                 .toIso8601String(), // 3 days ago
@@ -353,7 +357,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        Controllers.profileController.isLoading.value
+                        Controllers.profileController
+                                    .isLoading[keys.getProfile] ??
+                                false
                             ? "--"
                             : Controllers
                                 .postController.posts[index].description,

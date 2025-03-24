@@ -7,6 +7,11 @@ import 'package:get/get.dart';
 export 'shared_pref/shared_pref.dart';
 export 'auth/auth.dart';
 
+class keys {
+  static String getUser = "getUsers";
+  static String getProfile = "getProfile";
+}
+
 Future<void> initControllers() async {
   await Get.put(PrefController()).initPref();
 
@@ -15,7 +20,6 @@ Future<void> initControllers() async {
   Get.put(PostController());
   Get.put(GoogleController());
   Get.put(FacebookController());
-
   Get.put(ProfileController());
 }
 
