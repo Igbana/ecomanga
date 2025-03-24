@@ -8,7 +8,7 @@ export 'shared_pref/shared_pref.dart';
 export 'auth/auth.dart';
 
 Future<void> initControllers() async {
-  Get.put(PrefController()).initPref();
+  await Get.put(PrefController()).initPref();
 
   Get.put(RegisterController());
   Get.put(LoginController());

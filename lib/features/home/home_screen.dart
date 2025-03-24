@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    print(Controllers.prefController.uId);
     Controllers.postController.getPosts();
     print(Controllers.postController.posts);
     super.initState();
@@ -40,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // Screen Height
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
@@ -304,6 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Posts Section
   Widget _buildPosts() {
+    Controllers.profileController.getUser();
     return Obx(() {
       if (Controllers.postController.isLoading.value) {
         return Center(child: Text("No post"));

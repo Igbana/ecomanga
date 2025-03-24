@@ -24,13 +24,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _init() {
     initControllers().then((_) async {
+      print("Hello");
       try {
-        Controllers.profileController.getUser();
-        Utils.go(
-          context: context,
-          screen: const RootScreen(),
-          replace: true,
-        );
+        await Controllers.profileController.getUser().then((val) {
+          print(val);
+          if (val)
+            Utils.go(
+              context: context,
+              screen: const RootScreen(),
+              replace: true,
+            );
+        });
       } catch (e) {
         if (Controllers.prefController.isLoggedin()) {
           try {
@@ -42,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
               );
             });
           } catch (e) {
+            // Controllers.prefController.logout();
             Utils.go(
               context: context,
               screen: const LoginScreen(),
@@ -49,9 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
             );
           }
         } else {
+          // Controllers.prefController.logout();
           Utils.go(
             context: context,
-            screen: const RegisterScreen(),
+            screen: const LoginScreen(),
             replace: true,
           );
         }

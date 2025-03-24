@@ -15,7 +15,7 @@ class PostController extends GetxController {
 
   void getPosts() async {
     isLoading.value = true;
-
+    posts = [];
     try {
       final response = await http.get(
         Urls.post,
@@ -41,9 +41,9 @@ class PostController extends GetxController {
     isLoading.value = false;
   }
 
-  void createPost(Post post) async {
+  void createPost(String desc, String username) async {
     isLoading.value = true;
-
+    posts = [];
     try {
       final response = await http.post(
         Urls.post,
@@ -53,13 +53,13 @@ class PostController extends GetxController {
           'Authorization': 'Bearer ${Controllers.prefController.aTk}',
         },
         body: {
-          "title": post.title,
-          "content": post.description,
+          "title": username + DateTime.now().toString(),
+          "content": desc,
         },
       );
       data = await json.decode(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         isSuccessful.value = true;
       } else {
         errorMessage.value = data['message'];

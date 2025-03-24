@@ -103,7 +103,7 @@ class ProfileScreen extends StatelessWidget {
                                 Controllers.profileController.isLoading.value
                                     ? " -- "
                                     : Controllers
-                                        .profileController.profile.fullName,
+                                        .profileController.profile!.fullName,
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -166,14 +166,14 @@ class ProfileScreen extends StatelessWidget {
                     return Column(
                       children: [
                         _buildSettingsItem('Fullname',
-                            Controllers.profileController.profile.fullName),
+                            Controllers.profileController.profile!.fullName),
                         _buildSettingsItem('Display name',
-                            Controllers.profileController.profile.username),
+                            Controllers.profileController.profile!.username),
                         _buildSettingsItem('Email address',
-                            Controllers.profileController.profile.email),
+                            Controllers.profileController.profile!.email),
                         _buildSettingsItem(
                             'Gender',
-                            Controllers.profileController.profile.gender
+                            Controllers.profileController.profile!.gender
                                 .toString()
                                 .capitalizeFirst!),
                         _buildSettingsItem('Age', '32'),
