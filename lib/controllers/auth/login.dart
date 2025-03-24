@@ -38,6 +38,7 @@ class LoginController extends GetxController {
         body: {"email": email, "password": password},
       );
       data = await json.decode(response.body);
+      print('data $data');
 
       if (response.statusCode.toString()[0] == "2") {
         // auth successful

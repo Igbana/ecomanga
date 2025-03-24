@@ -1,8 +1,11 @@
 // create_post_page.dart
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
+import 'package:ecomanga/controllers/controllers.dart';
+import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
@@ -13,7 +16,14 @@ class CreatePostPage extends StatefulWidget {
 
 class _CreatePostPageState extends State<CreatePostPage> {
   @override
+  void initState() {
+    Controllers.profileController.getUser();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    TextEditingController _descriptionController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -26,41 +36,47 @@ class _CreatePostPageState extends State<CreatePostPage> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: const NetworkImage(
-                    'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2V4eSUyMGdpcmx8ZW58MHx8MHx8fDA%3D', // Replace with your profile image URL
+            Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: const NetworkImage(
+                      'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2V4eSUyMGdpcmx8ZW58MHx8MHx8fDA%3D', // Replace with your profile image URL
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Jayce Rudrygo',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.sp),
-                    ),
-                    Text(
-                      'Community',
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        color: Colors.grey,
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        Controllers.profileController.isLoading.value
+                            ? "--"
+                            : Controllers.profileController.user!.fullName,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.sp),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      Text(
+                        'Community',
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }),
             SizedBox(height: 20.h),
-            const TextField(
+            TextField(
               maxLines: 7,
+              controller: _descriptionController,
+              autofocus: true,
               decoration: InputDecoration(
                 hintText: 'What do you think?',
                 border: OutlineInputBorder(),
@@ -87,7 +103,41 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ),
             ),
             const Spacer(),
-            DynamicButton.fromText(text: "Post", onPressed: () {}),
+            Obx(() {
+              return DynamicButton(
+                isLoading: Controllers.postController.isLoading.value,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Post",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    if (Controllers.postController.isLoading.value)
+                      SizedBox(
+                        height: 17,
+                        width: 17,
+                        child: CircularProgressIndicator(strokeWidth: 3),
+                      )
+                  ],
+                ),
+                onPressed: () {
+                  Controllers.postController.createPost(
+                    _descriptionController.text,
+                    Controllers.profileController.user!.username,
+                  );
+                  if (Controllers.postController.isSuccessful.value) {
+                    Navigator.of(context).pop();
+                    Controllers.postController.isSuccessful.value = false;
+                  }
+                },
+              );
+            }),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             ),
