@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // Screen Height
     final screenHeight = MediaQuery.of(context).size.height;
+    Controllers.postController.refreshPosts();
     return Scaffold(
       appBar: _buildAppBar(),
       body: SingleChildScrollView(

@@ -2,6 +2,7 @@
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
 import 'package:ecomanga/controllers/controllers.dart';
+import 'package:ecomanga/features/home/home_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +18,7 @@ class CreatePostPage extends StatefulWidget {
 class _CreatePostPageState extends State<CreatePostPage> {
   @override
   void initState() {
-    Controllers.profileController.getUser();
+    Controllers.profileController.getProfile();
     super.initState();
   }
 
@@ -58,7 +59,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                     .isLoading[keys.getProfile] ??
                                 false
                             ? "--"
-                            : Controllers.profileController.user!.fullName,
+                            : Controllers.profileController.profile!.fullName,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16.sp),
                       ),
@@ -129,14 +130,18 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   ],
                 ),
                 onPressed: () {
-                  Controllers.postController.createPost(
+                  Controllers.postController
+                      .createPost(
                     _descriptionController.text,
-                    Controllers.profileController.user!.username,
-                  );
-                  if (Controllers.postController.isSuccessful.value) {
-                    Navigator.of(context).pop();
-                    Controllers.postController.isSuccessful.value = false;
-                  }
+                    Controllers.profileController.profile!.username,
+                  )
+                      .then((_) {
+                    _descriptionController.text = "";
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: (_) {
+                      return HomeScreen();
+                    }));
+                  });
                 },
               );
             }),

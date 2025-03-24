@@ -1,15 +1,16 @@
-import 'package:ecomanga/controllers/auth/auth.dart';
-import 'package:ecomanga/controllers/post/posts.dart';
-import 'package:ecomanga/controllers/profile/profile.dart';
 import 'package:ecomanga/controllers/shared_pref/shared_pref.dart';
+import 'package:ecomanga/controllers/profile/profile.dart';
+import 'package:ecomanga/controllers/post/posts.dart';
+import 'package:ecomanga/controllers/auth/auth.dart';
 import 'package:get/get.dart';
-
-export 'shared_pref/shared_pref.dart';
 export 'auth/auth.dart';
 
 class keys {
   static String getUser = "getUsers";
   static String getProfile = "getProfile";
+  static String createPost = "createPost";
+  static String getPosts = "getPosts";
+  static String refreshPost = "refreshPost";
 }
 
 Future<void> initControllers() async {

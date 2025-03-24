@@ -41,9 +41,8 @@ class PostController extends GetxController {
     isLoading.value = false;
   }
 
-  void createPost(String desc, String username) async {
+  Future<void> createPost(String desc, String username) async {
     isLoading.value = true;
-    posts = [];
     try {
       final response = await http.post(
         Urls.post,
@@ -52,11 +51,12 @@ class PostController extends GetxController {
           'Accept': 'application/json',
           'Authorization': 'Bearer ${Controllers.prefController.aTk}',
         },
-        body: {
+        body: json.encode({
           "title": username + DateTime.now().toString(),
           "content": desc,
-        },
+        }),
       );
+      print(response.statusCode);
       data = await json.decode(response.body);
 
       if (response.statusCode == 201) {
@@ -70,5 +70,9 @@ class PostController extends GetxController {
     }
 
     isLoading.value = false;
+  }
+
+  void refreshPosts (){
+    
   }
 }

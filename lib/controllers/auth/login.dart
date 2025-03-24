@@ -12,15 +12,14 @@ class LoginController extends GetxController {
 
   Future<Map> refreshAuth() async {
     try {
-      PrefController prefController = Get.find();
 
       final response = await http.post(
         Urls.auth_refresh,
-        body: {"refreshToken": prefController.rTk},
+        body: {"refreshToken": Controllers.prefController.rTk},
       );
       data = await json.decode(response.body);
       if (response.statusCode == 200) {
-        prefController.refrsh(data["accessToken"]);
+        Controllers.prefController.refrsh(data["accessToken"]);
       }
     } catch (e) {
       throw Exception("Unable to refresh");
