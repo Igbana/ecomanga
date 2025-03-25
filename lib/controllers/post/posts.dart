@@ -7,15 +7,20 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 class PostController extends GetxController {
-  RxBool isLoading = false.obs;
+  RxMap<String, bool> isLoading = {
+    keys.createPost: false,
+    keys.getPosts: false,
+    keys.refreshPost: false,
+  }.obs;
   RxBool isSuccessful = false.obs;
   RxString errorMessage = "".obs;
   Map<String, dynamic> data = {};
   List<Post> posts = [];
+  List<Post> newPosts = [];
 
   void getPosts() async {
-    isLoading.value = true;
-    posts = [];
+    isLoading[keys.getPosts] = true;
+
     try {
       final response = await http.get(
         Urls.post,
@@ -29,20 +34,22 @@ class PostController extends GetxController {
 
       if (response.statusCode == 200) {
         print(data['data']);
-        data['data'].forEach((post) => posts.add(Post.fromJson(post)));
+        data['data'].forEach((post) => newPosts.add(Post.fromJson(post)));
+        if (newPosts != posts) posts = newPosts;
+        newPosts = [];
       } else {
         errorMessage.value = data['message'];
         // throw Exception("Unauthorized");
       }
     } catch (e) {
       errorMessage.value = e.toString();
+    } finally {
+      isLoading[keys.getPosts] = false;
     }
-
-    isLoading.value = false;
   }
 
   Future<void> createPost(String desc, String username) async {
-    isLoading.value = true;
+    isLoading[keys.createPost] = true;
     try {
       final response = await http.post(
         Urls.post,
@@ -67,12 +74,8 @@ class PostController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = e.toString();
+    } finally {
+      isLoading[keys.createPost] = false;
     }
-
-    isLoading.value = false;
-  }
-
-  void refreshPosts (){
-    
   }
 }

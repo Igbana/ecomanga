@@ -1,11 +1,9 @@
-// create_post_page.dart
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
-import 'package:ecomanga/common/buttons/scale_button.dart';
-import 'package:ecomanga/controllers/controllers.dart';
-import 'package:ecomanga/features/home/home_screen.dart';
-import 'package:ecomanga/features/utils/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ecomanga/common/buttons/scale_button.dart';
+import 'package:ecomanga/features/home/root_screen.dart';
+import 'package:ecomanga/controllers/controllers.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -108,7 +106,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
             const Spacer(),
             Obx(() {
               return DynamicButton(
-                isLoading: Controllers.postController.isLoading.value,
+                isLoading:
+                    Controllers.postController.isLoading[keys.createPost],
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -121,7 +120,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       ),
                     ),
                     SizedBox(width: 12),
-                    if (Controllers.postController.isLoading.value)
+                    if (Controllers.postController.isLoading[keys.createPost] ??
+                        false)
                       SizedBox(
                         height: 17,
                         width: 17,
@@ -139,7 +139,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     _descriptionController.text = "";
                     Navigator.of(context)
                         .pushReplacement(MaterialPageRoute(builder: (_) {
-                      return HomeScreen();
+                      return RootScreen();
                     }));
                   });
                 },

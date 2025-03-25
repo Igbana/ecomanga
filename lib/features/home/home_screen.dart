@@ -9,6 +9,7 @@ import 'package:ecomanga/features/home/create_post_screen.dart';
 import 'package:ecomanga/features/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,18 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
-  void initState() {
-    print(Controllers.prefController.uId);
-    Controllers.postController.getPosts();
-    print(Controllers.postController.posts);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // Screen Height
     final screenHeight = MediaQuery.of(context).size.height;
-    Controllers.postController.refreshPosts();
+    Controllers.postController.getPosts();
     return Scaffold(
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
@@ -305,136 +298,140 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Posts Section
   Widget _buildPosts() {
-    Controllers.profileController.getUser();
-    return Obx(() {
-      if (Controllers.postController.isLoading.value) {
-        return Center(child: Text("No post"));
-      } else
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: Controllers.postController.posts.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 6,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
-                        ),
-                      ),
-                      title: Text(
-                        Controllers.profileController
-                                    .isLoading[keys.getProfile] ??
-                                false
-                            ? "--"
-                            : Controllers.postController.posts[index].author,
-                      ),
-                      subtitle: Text(
-                        Controllers.profileController
-                                    .isLoading[keys.getProfile] ??
-                                false
-                            ? "--"
-                            : Controllers.postController.posts[index].createdAt
-                                .toIso8601String(), // 3 days ago
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        Controllers.profileController
-                                    .isLoading[keys.getProfile] ??
-                                false
-                            ? "--"
-                            : Controllers
-                                .postController.posts[index].description,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      height: 200,
-                      child: ScaleButton(
-                        onTap: () {
-                          Utils.go(
-                            context: context,
-                            screen: SocialPostScreen(
-                              tag: "post_image_$index.tostrig",
-                              image:
-                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q",
-                              profileImg:
-                                  "https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400",
-                            ),
-                          );
-                        },
-                        child: Hero(
-                          tag: 'post_image_$index',
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(8),
-                            ),
-                            child: Image.network(
-                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.favorite_border_outlined)),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.comment_outlined)),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        ScaleButton(
-                          onTap: () {},
-                          child: Image.asset(
-                            "assets/icons/send.png",
-                            height: 40,
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+    // Controllers.profileController.getUser();
+    if (Controllers.postController.posts.isEmpty) {
+      return Center(
+        child: SizedBox(
+          height: 36,
+          width: 36,
+          child: Text("No Posts"),
+        ),
+      );
+    } else
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: Controllers.postController.posts.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius: 6,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-            );
-          },
-        );
-    });
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400',
+                      ),
+                    ),
+                    title: Text(
+                      Controllers.profileController
+                                  .isLoading[keys.getProfile] ??
+                              false
+                          ? "--"
+                          : Controllers
+                              .postController.posts[index].author.capitalize!,
+                    ),
+                    subtitle: Text(
+                      Controllers.profileController
+                                  .isLoading[keys.getProfile] ??
+                              false
+                          ? "--"
+                          : DateFormat('y-MM-dd HH:mm').format(Controllers
+                              .postController.posts[index].createdAt),
+                      // 3 days ago
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      Controllers.profileController
+                                  .isLoading[keys.getProfile] ??
+                              false
+                          ? "--"
+                          : Controllers.postController.posts[index].description,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    height: 200,
+                    child: ScaleButton(
+                      onTap: () {
+                        Utils.go(
+                          context: context,
+                          screen: SocialPostScreen(
+                            tag: "post_image_$index.tostrig",
+                            image:
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q",
+                            profileImg:
+                                "https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400",
+                          ),
+                        );
+                      },
+                      child: Hero(
+                        tag: 'post_image_$index',
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          ),
+                          child: Image.network(
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCqwlRGS6Xd1cSAO0KqutnKKCpEaU_YPEpsPaZWAPgMBI8cUYJS7IgQiS82Aou65rTm2Q',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.favorite_border_outlined)),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                          onPressed: () {}, icon: Icon(Icons.comment_outlined)),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      ScaleButton(
+                        onTap: () {},
+                        child: Image.asset(
+                          "assets/icons/send.png",
+                          height: 40,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
   }
 
   // Marketplace Content Placeholder
