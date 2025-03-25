@@ -350,8 +350,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .isLoading[keys.getProfile] ??
                               false
                           ? "--"
-                          : DateFormat('y-MM-dd HH:mm').format(Controllers
-                              .postController.posts[index].createdAt),
+                          : DateFormat('y-MM-dd HH:mm').format(
+                              Controllers.postController.posts[index].createdAt,
+                            ),
                       // 3 days ago
                     ),
                   ),
@@ -370,6 +371,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 200,
                     child: ScaleButton(
                       onTap: () {
+                        Controllers.postController.getPostById(
+                          Controllers.postController.posts[index].id,
+                        );
+                        Controllers.postController.getCommentsById(
+                          Controllers.postController.posts[index].id,
+                        );
                         Utils.go(
                           context: context,
                           screen: SocialPostScreen(

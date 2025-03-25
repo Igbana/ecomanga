@@ -33,4 +33,8 @@ class Urls {
       Uri.parse("${Constants.BASE_URL}/profile/follow");
 
   static final Uri post = Uri.parse("${Constants.BASE_URL}/post/");
+  static Uri postById(int id) => Uri.parse("${Constants.BASE_URL}/post/$id/");
+  static Uri commentsById(int id) => Uri.parse(
+        "${Constants.BASE_URL}/post/$id/comments/",
+      );
 }

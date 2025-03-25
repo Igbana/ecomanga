@@ -10,7 +10,8 @@ class keys {
   static String getProfile = "getProfile";
   static String createPost = "createPost";
   static String getPosts = "getPosts";
-  static String refreshPost = "refreshPost";
+  static String getPostById = "getPostById";
+  static String getCommentById = "getCommentById";
 }
 
 Future<void> initControllers() async {

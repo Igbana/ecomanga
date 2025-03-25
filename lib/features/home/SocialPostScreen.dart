@@ -1,4 +1,6 @@
+import 'package:ecomanga/controllers/controllers.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SocialPostScreen extends StatefulWidget {
   final String image;
@@ -31,6 +33,7 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Header with back button and username
                 Container(
@@ -42,18 +45,20 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
                         backgroundImage: NetworkImage(widget.profileImg),
                       ),
                       const SizedBox(width: 8),
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Jayce Rodrigo',
+                            Controllers.postController.post!.author,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            '3 days ago',
+                            DateFormat('y-MM-dd HH:mm').format(
+                              Controllers.postController.post!.createdAt,
+                            ),
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
@@ -66,10 +71,10 @@ class _SocialPostScreenState extends State<SocialPostScreen> {
                 ),
 
                 // Post text
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate libero et velit interdum, ac aliquot odio mattis.',
+                    Controllers.postController.post!.description,
                     style: TextStyle(fontSize: 14),
                   ),
                 ),

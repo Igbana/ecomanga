@@ -10,13 +10,15 @@ class PostController extends GetxController {
   RxMap<String, bool> isLoading = {
     keys.createPost: false,
     keys.getPosts: false,
-    keys.refreshPost: false,
+    keys.getPostById: false,
+    keys.getCommentById: false,
   }.obs;
   RxBool isSuccessful = false.obs;
   RxString errorMessage = "".obs;
   Map<String, dynamic> data = {};
   List<Post> posts = [];
   List<Post> newPosts = [];
+  Post? post;
 
   void getPosts() async {
     isLoading[keys.getPosts] = true;
@@ -33,10 +35,64 @@ class PostController extends GetxController {
       data = await json.decode(response.body);
 
       if (response.statusCode == 200) {
-        print(data['data']);
         data['data'].forEach((post) => newPosts.add(Post.fromJson(post)));
         if (newPosts != posts) posts = newPosts;
         newPosts = [];
+      } else {
+        errorMessage.value = data['message'];
+        // throw Exception("Unauthorized");
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading[keys.getPosts] = false;
+    }
+  }
+
+  void getPostById(int id) async {
+    isLoading[keys.getPosts] = true;
+
+    try {
+      final response = await http.get(
+        Urls.postById(id),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${Controllers.prefController.aTk}',
+        },
+      );
+      data = await json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        post = Post.fromJson(data['data']);
+        print(post!.author);
+      } else {
+        errorMessage.value = data['message'];
+        // throw Exception("Unauthorized");
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading[keys.getPosts] = false;
+    }
+  }
+
+  void getCommentsById(int id) async {
+    isLoading[keys.getPosts] = true;
+
+    try {
+      final response = await http.get(
+        Urls.commentsById(id),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${Controllers.prefController.aTk}',
+        },
+      );
+      data = await json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        print(data['data']);
       } else {
         errorMessage.value = data['message'];
         // throw Exception("Unauthorized");
