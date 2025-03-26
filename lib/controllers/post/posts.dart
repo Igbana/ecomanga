@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:ecomanga/controllers/controllers.dart';
 import 'package:ecomanga/models/models.dart';
@@ -104,7 +105,11 @@ class PostController extends GetxController {
     }
   }
 
-  Future<void> createPost(String desc, String username) async {
+  Future<void> createPost(
+    String desc,
+    String username,
+    Uint8List? image,
+  ) async {
     isLoading[keys.createPost] = true;
     try {
       final response = await http.post(

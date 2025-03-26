@@ -1,0 +1,2 @@
+C:/Users/Neon/Desktop/ecomanga/android/app/.cxx/RelWithDebInfo/2v556e1x/x86/CMakeFiles/edit_cache.dir
+C:/Users/Neon/Desktop/ecomanga/android/app/.cxx/RelWithDebInfo/2v556e1x/x86/CMakeFiles/rebuild_cache.dir

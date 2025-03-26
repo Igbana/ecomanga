@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ecomanga/common/buttons/scale_button.dart';
@@ -5,6 +7,7 @@ import 'package:ecomanga/features/home/root_screen.dart';
 import 'package:ecomanga/controllers/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
@@ -17,12 +20,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
   @override
   void initState() {
     Controllers.profileController.getProfile();
+
     super.initState();
   }
 
+  final TextEditingController _descriptionController = TextEditingController();
+  Uint8List? imageBytes;
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController _descriptionController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -85,7 +91,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
             ),
             SizedBox(height: 20.h),
             ScaleButton(
-              onTap: () {},
+              onTap: () async {
+                final ImagePicker picker = ImagePicker();
+                print("Help");
+                final XFile? image =
+                    await picker.pickImage(source: ImageSource.gallery);
+                if (image == null) return;
+                imageBytes = await image.readAsBytes();
+                print(" is ${imageBytes.toString()}");
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 7.h),
                 width: double.infinity,
@@ -132,9 +146,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 onPressed: () {
                   Controllers.postController
                       .createPost(
-                    _descriptionController.text,
-                    Controllers.profileController.profile!.username,
-                  )
+                          _descriptionController.text,
+                          Controllers.profileController.profile!.username,
+                          imageBytes)
                       .then((_) {
                     _descriptionController.text = "";
                     Navigator.of(context)
