@@ -5,14 +5,16 @@ class PrefController extends GetxController {
   SharedPreferences? _pref;
   RxBool isloading = false.obs;
 
-  void initPref() async {
+  Future<void> initPref() async {
     isloading.value = true;
     _pref = await SharedPreferences.getInstance();
     isloading.value = false;
   }
 
   void login(String aTk, String rTk, String uId) {
+    print("Called login");
     if (!_pref!.containsKey('aTk') && !_pref!.containsKey('rTk')) {
+      print("Doesnt have");
       _pref?.setString('aTk', aTk);
       _pref?.setString('rTk', rTk);
       _pref?.setString('uid', uId);

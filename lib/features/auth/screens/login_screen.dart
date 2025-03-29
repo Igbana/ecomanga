@@ -137,9 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 3.h,
                 ),
                 Obx(() {
-                  LoginController loginController = Get.find();
-                  PrefController prefController = Get.find();
-                  if (loginController.errorMessage.value != "") {
+                  if (Controllers.loginController.errorMessage.value != "") {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       showDialog(
                         context: context,
@@ -154,7 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           content: Text(
-                            loginController.errorMessage.value.trim(),
+                            Controllers.loginController.errorMessage.value
+                                .trim(),
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.white,
@@ -162,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ).then((_) {
-                        loginController.errorMessage.value = "";
+                        Controllers.loginController.errorMessage.value = "";
                       });
                     });
                   }
@@ -179,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         SizedBox(width: 12),
-                        if (loginController.isLoading.value)
+                        if (Controllers.loginController.isLoading.value)
                           SizedBox(
                             height: 17,
                             width: 17,
@@ -188,16 +187,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     onPressed: () async {
-                      final resp = await loginController.login(
+                      await Controllers.loginController.login(
                         password: _password.text,
                         email: _email.text,
                       );
-                      if (loginController.authSuccessful.value) {
-                        prefController.login(resp[0], resp[1], resp[2]);
+                      if (Controllers.loginController.authSuccessful.value) {
                         Utils.go(context: context, screen: const RootScreen());
                       }
                     },
-                    isLoading: loginController.isLoading.value,
+                    isLoading: Controllers.loginController.isLoading.value,
                   );
                 }),
                 SizedBox(

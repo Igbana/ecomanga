@@ -1,8 +1,13 @@
-// create_post_page.dart
+import 'dart:typed_data';
+
 import 'package:ecomanga/common/buttons/dynamic_button.dart';
-import 'package:ecomanga/common/buttons/scale_button.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ecomanga/common/buttons/scale_button.dart';
+import 'package:ecomanga/features/home/root_screen.dart';
+import 'package:ecomanga/controllers/controllers.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
@@ -12,6 +17,16 @@ class CreatePostPage extends StatefulWidget {
 }
 
 class _CreatePostPageState extends State<CreatePostPage> {
+  @override
+  void initState() {
+    Controllers.profileController.getProfile();
+
+    super.initState();
+  }
+
+  final TextEditingController _descriptionController = TextEditingController();
+  Uint8List? imageBytes;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,41 +41,49 @@ class _CreatePostPageState extends State<CreatePostPage> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: const NetworkImage(
-                    'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2V4eSUyMGdpcmx8ZW58MHx8MHx8fDA%3D', // Replace with your profile image URL
+            Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: const NetworkImage(
+                      'https://images.unsplash.com/photo-1657306607237-3eab445c4a84?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2V4eSUyMGdpcmx8ZW58MHx8MHx8fDA%3D', // Replace with your profile image URL
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Jayce Rudrygo',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.sp),
-                    ),
-                    Text(
-                      'Community',
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        color: Colors.grey,
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        Controllers.profileController
+                                    .isLoading[keys.getProfile] ??
+                                false
+                            ? "--"
+                            : Controllers.profileController.profile!.fullName,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.sp),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      Text(
+                        'Community',
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }),
             SizedBox(height: 20.h),
-            const TextField(
+            TextField(
               maxLines: 7,
+              controller: _descriptionController,
+              autofocus: true,
               decoration: InputDecoration(
                 hintText: 'What do you think?',
                 border: OutlineInputBorder(),
@@ -68,7 +91,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
             ),
             SizedBox(height: 20.h),
             ScaleButton(
-              onTap: () {},
+              onTap: () async {
+                final ImagePicker picker = ImagePicker();
+                print("Help");
+                final XFile? image =
+                    await picker.pickImage(source: ImageSource.gallery);
+                if (image == null) return;
+                imageBytes = await image.readAsBytes();
+                print(" is ${imageBytes.toString()}");
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 7.h),
                 width: double.infinity,
@@ -87,7 +118,47 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ),
             ),
             const Spacer(),
-            DynamicButton.fromText(text: "Post", onPressed: () {}),
+            Obx(() {
+              return DynamicButton(
+                isLoading:
+                    Controllers.postController.isLoading[keys.createPost],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Post",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    if (Controllers.postController.isLoading[keys.createPost] ??
+                        false)
+                      SizedBox(
+                        height: 17,
+                        width: 17,
+                        child: CircularProgressIndicator(strokeWidth: 3),
+                      )
+                  ],
+                ),
+                onPressed: () {
+                  Controllers.postController
+                      .createPost(
+                          _descriptionController.text,
+                          Controllers.profileController.profile!.username,
+                          imageBytes)
+                      .then((_) {
+                    _descriptionController.text = "";
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: (_) {
+                      return RootScreen();
+                    }));
+                  });
+                },
+              );
+            }),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             ),

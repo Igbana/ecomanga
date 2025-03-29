@@ -70,7 +70,7 @@ class User {
     };
   }
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<dynamic, dynamic> json) {
     return User(
       userId: json['userId'],
       email: json['email'],

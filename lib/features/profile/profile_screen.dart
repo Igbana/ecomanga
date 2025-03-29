@@ -100,10 +100,12 @@ class ProfileScreen extends StatelessWidget {
                           Obx(
                             () {
                               return Text(
-                                Controllers.profileController.isLoading.value
+                                Controllers.profileController
+                                            .isLoading[keys.getProfile] ??
+                                        false
                                     ? " -- "
                                     : Controllers
-                                        .profileController.profile.fullName,
+                                        .profileController.profile!.fullName,
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -152,7 +154,9 @@ class ProfileScreen extends StatelessWidget {
                 // _buildSettingsItem('Password', '••••••••••'),
 
                 Obx(() {
-                  if (Controllers.profileController.isLoading.value) {
+                  if (Controllers
+                          .profileController.isLoading[keys.getProfile] ??
+                      false) {
                     return Column(
                       children: [
                         _buildSettingsItem('Fullname', "---"),
@@ -166,14 +170,14 @@ class ProfileScreen extends StatelessWidget {
                     return Column(
                       children: [
                         _buildSettingsItem('Fullname',
-                            Controllers.profileController.profile.fullName),
+                            Controllers.profileController.profile!.fullName),
                         _buildSettingsItem('Display name',
-                            Controllers.profileController.profile.username),
+                            Controllers.profileController.profile!.username),
                         _buildSettingsItem('Email address',
-                            Controllers.profileController.profile.email),
+                            Controllers.profileController.profile!.email),
                         _buildSettingsItem(
                             'Gender',
-                            Controllers.profileController.profile.gender
+                            Controllers.profileController.profile!.gender
                                 .toString()
                                 .capitalizeFirst!),
                         _buildSettingsItem('Age', '32'),
